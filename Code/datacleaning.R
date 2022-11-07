@@ -23,3 +23,13 @@ business1<- business %>%
   mutate(categories=str_trim(categories, side="both"))
 
 types<- business1%>% select(categories) %>% group_by(categories) %>% arrange(categories) %>%  slice(1)
+
+sushi<- business1 %>% filter(categories == "Sushi Bars")
+MO<- business1 %>% filter(state=="MO")
+IL<- business1 %>% filter(state == "IL")
+write.csv(IL, "/Users/rachelstuder/Desktop/628 Practicum/Mod 3//IL.csv", row.names=FALSE)
+IL_types <-  IL %>% select(categories) %>% group_by(categories) %>% arrange(categories) %>%  slice(1)
+tab<- table(IL$categories)
+tab[order(tab, decreasing = TRUE)]
+MO_sushi<- MO %>% filter(categories=="Sushi Bars")
+IL_sushi<- IL %>% filter(categories=="Sushi Bars")
