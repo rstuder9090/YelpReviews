@@ -16,20 +16,20 @@ user<-stream_in(textConnection(readLines(file4, n=100000)), flatten = TRUE)
 
 business<- business %>% select(-starts_with("hours")) %>% 
   filter(grepl('Restaurant',categories )) 
-business1<- business %>% 
-  arrange(state) %>%
-  mutate(categories=str_split(categories, ",")) %>%
-  unnest(categories) %>%
-  mutate(categories=str_trim(categories, side="both"))
+sushi1<- business %>% filter(grepl('Sushi', categories))
+sushi2<- sushi1 %>% 
+  filter(!grepl("Education | Books | Buffets | Caterers | Dance Clubs | Event Planning | Florists | Landmarks & Historical Buildings | Music Venues | Shopping Centers | Pharmacy | Sports Bars | Wine Bars", categories))
 
-types<- business1%>% select(categories) %>% group_by(categories) %>% arrange(categories) %>%  slice(1)
+sushi2<- sushi2 %>% filter(!state== "AB") %>% mutate(costal_inland = case_when(
+  state == "PA" | state == "DE" | state == "NJ" | state == "FL" | state == "LA" | state == "CA" ~ "costal",
+   state == "TN" | state == "MO" | state == "IL" | state == "IN" | state == "AZ" | state == "NV" | state == "ID" ~ "inland"
+)) %>% mutate(region = case_when(
+  state == "CA" | state == "AZ" | state == "NV" | state == "ID" ~ "West",
+  state == "MO" | state == "IL" | state == "IN" ~ "Midwest", 
+  state == "TN" | state == "FL" | state == "LA" ~ "South",
+  state == "PA" | state == "DE" | state == "NJ" ~ "East"
+))
 
-sushi<- business1 %>% filter(categories == "Sushi Bars")
-MO<- business1 %>% filter(state=="MO")
-IL<- business1 %>% filter(state == "IL")
-write.csv(IL, "/Users/rachelstuder/Desktop/628 Practicum/Mod 3//IL.csv", row.names=FALSE)
-IL_types <-  IL %>% select(categories) %>% group_by(categories) %>% arrange(categories) %>%  slice(1)
-tab<- table(IL$categories)
-tab[order(tab, decreasing = TRUE)]
-MO_sushi<- MO %>% filter(categories=="Sushi Bars")
-IL_sushi<- IL %>% filter(categories=="Sushi Bars")
+write_csv(sushi2, "/Users/rachelstuder/Desktop/628 Practicum/Mod 3//sushi2.csv")
+
+hist(sushi2$stars, main="Distribution of Stars for Sushi Restaurants", xlab="Star Rating", ylab="Frequency")
