@@ -1,5 +1,6 @@
 # YelpReviews
 Project for UW-Madison STAT 628 Module 3 - Group 14
+
 Parsing through Yelp Review data to find information on what benefits sushi restaurants.
 
 Created with R 4.1.1
