@@ -82,4 +82,49 @@ sushi_tips[ , 6] <- x #rewrite as new column to keep old data for error checking
 write.csv(sushi_tips,"sushi_tips.csv")
 
 
+sushi_reviews$isFresh <- ifelse(grepl("fresh", sushi_reviews[,11], fixed=TRUE), 1,0)  #check if review contains fresh
+
+temp <- sushi %>% 
+  select(business_id,coastal_inland, region)
+
+sushi_reviews <- sushi_reviews %>% 
+left_join(temp, by = c("business_id" = "business_id"))
+
+
+sushi_reviews %>% 
+  group_by(coastal_inland) %>% 
+  summarise(sum = sum(isFresh), n = n(), percentage = sum/n)   #calculate number of fresh mentions by coastal_inland 
+                                              #and check how many reviews for each
+
+sushi_reviews %>% 
+  group_by(region) %>% 
+  summarise(sum = sum(isFresh), n = n(), percentage = sum/n)  #calculate number of fresh mentions by region
+                                              #and check how many reviews for each
+
+sushi_reviews %>% 
+  group_by(business_id) %>%                 #calculate number of fresh mentions by business
+  summarise(sum = sum(isFresh),n = n(), percentage = sum/n)  #and check how many reviews for each
+                                                                
+                                                                  
+
+stars_fresh <- sushi_reviews %>% 
+  group_by(stars) %>%                 #calculate number of fresh mentions by business
+  summarise(sum = sum(isFresh),n = n(), percentage = sum/n)  #and check how many reviews for each
+
+
+#stars for fresh distribution
+stars_fresh %>% 
+  ggplot() + 
+  geom_col(aes(x=stars,y=percentage)) + 
+  geom_text(aes(x = stars,y=percentage, label = round(percentage,3)), vjust = 2) +
+  labs(title = 'Frequency of Fresh Occuring in Reviews')  #over 1 in 4 chance of review mentioning fresh if 5 stars
+
+            
+            
+            
+            
+            
+            
+            
+            
 
