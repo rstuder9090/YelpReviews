@@ -12,7 +12,6 @@ Contains any R code for cleaning, analysis, visualization, or Shiny App creation
 - [explore_ran.R](Code/explore_ran.R)
 - [sushiMap.R](Code/sushiMap.R)
 - [TextAnalysis.R](Code/TextAnalysis.R)
-- [Word Counting for sushi res.ipynb](Code/Word Counting for sushi res.ipynb)
 
 
 ## Data Folder
