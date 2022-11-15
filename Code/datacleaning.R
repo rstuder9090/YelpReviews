@@ -1,17 +1,12 @@
 library(jsonlite)
 library(dplyr)
 library(tidyr)
+library(readr)
 library(stringr)
 
 #Stream in all json files
-file1 <- 'business.json'
-business<-stream_in(textConnection(readLines(file1, n=1000000)), flatten = TRUE)
-file2 <- 'review.json'
-review<-stream_in(textConnection(readLines(file2, n=100000)), flatten = TRUE)
-file3 <- 'tip.json'
-tip<-stream_in(textConnection(readLines(file3, n=100000)), flatten = TRUE)
-file4 <- 'user.json'
-user<-stream_in(textConnection(readLines(file4, n=100000)), flatten = TRUE)
+file <- 'business.json'
+business<-stream_in(textConnection(readLines(file, n=1000000)), flatten = TRUE)
 
 #Filter for Sushi Restaurants. Limit to main business as Sushi Bar.
 business<- business %>% select(-starts_with("hours")) %>% 
@@ -29,10 +24,9 @@ sushi2<- sushi2 %>% mutate(coastal_inland = case_when(
   state == "CA" | state == "AZ" | state == "NV" | state == "ID" ~ "West",
   state == "MO" | state == "IL" | state == "IN" ~ "Midwest", 
   state == "TN" | state == "FL" | state == "LA" ~ "South",
-  state == "PA" | state == "DE" | state == "NJ" ~ "East"
+  state == "PA" | state == "DE" | state == "NJ" ~ "Northeast"
 ))
 
 #Write sushi.csv
 path<- getwd()
-write_csv(sushi2, file.path(path, "sushi.csv"), row.names=FALSE)
-
+write.csv(sushi2, file.path(path, "sushi.csv"), row.names=FALSE)
