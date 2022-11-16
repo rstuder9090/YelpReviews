@@ -4,22 +4,27 @@ library(textstem)
 library(tm)
 
 
-sushi <- read.csv("../sushi.csv")
+sushi <- read.csv("sushi.csv")
+
+
+sushi_reviews <- read.csv("sushi_reviews.csv")
+
+
 
 #code to cut large dataframe into smaller pieces
 
-total <- nrow(review)
-cuts <- round(total/200000) #200000 reviews per file
+total <- nrow(sushi_reviews)
+cuts <- round(total/21556) #21 MB per file
 
 for(i in 1:cuts){
   print(i)
-  start <- 1+(i-1)*200000
-  if(i*200000 > total){
+  start <- 1+(i-1)*21556
+  if(i*21556 > total){
     end <- total
   }
-  else{end <- i*200000}
-  name <- paste0("review-",i)
-  write.csv(review[start:end,], paste0(name,".csv"))
+  else{end <- i*21556}
+  name <- paste0("sushi_review-",i)
+  write.csv(sushi_reviews[start:end,], paste0(name,".csv"))
   
 }
 
@@ -108,7 +113,7 @@ sushi_reviews %>%
                                                                   
 
 stars_fresh <- sushi_reviews %>% 
-  group_by(stars) %>%                 #calculate number of fresh mentions by business
+  group_by(stars, region) %>%                 #calculate number of fresh mentions by star
   summarise(sum = sum(isFresh),n = n(), percentage = sum/n)  #and check how many reviews for each
 
 
@@ -117,14 +122,32 @@ stars_fresh %>%
   ggplot() + 
   geom_col(aes(x=stars,y=percentage)) + 
   geom_text(aes(x = stars,y=percentage, label = round(percentage,3)), vjust = 2) +
-  labs(title = 'Frequency of Fresh Occuring in Reviews')  #over 1 in 4 chance of review mentioning fresh if 5 stars
+  labs(title = 'Frequency of Fresh Occuring in Reviews') #over 1 in 4 chance of review mentioning fresh if 5 stars
 
-            
-            
-            
-            
-            
-            
-            
-            
+
+sushi_reviews$is
+
+
+
+sushi %>% 
+  ggplot() + 
+  geom_histogram(aes(stars)) + 
+  facet_wrap(vars(region), scales = "free_y")
+
+
+
+sushi %>% 
+  ggplot() + 
+  geom_histogram(aes(stars)) + 
+  facet_wrap(vars(coastal_inland), scales = "free_y")
+
+
+stars_fresh %>% 
+  ggplot() + 
+  geom_col(aes(x=stars,y=percentage)) + 
+  facet_wrap(vars(region)) + 
+  geom_text(aes(x = stars,y=percentage, label = round(percentage,3)), vjust = 1) +
+  labs(title = 'Midwest Not-So Fresh: Frequency of Fresh Occuring in Reviews by Region') #over 1 in 4 chance of review mentioning fresh if 5 stars
+  
+
 
