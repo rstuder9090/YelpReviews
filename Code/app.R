@@ -28,6 +28,7 @@ sushi$city[which(sushi$city == "MEDIA" & sushi$state == "PA" )] <- "Media"
 sushi$city[which(sushi$city == "Warrington Township" & sushi$state == "PA" )] <- "Warrington"
 sushi$city[which((sushi$city == "Mt Juliet Louis" | sushi$city == "Mt. Juliet")& sushi$state=="TN" )] <- "Mount Juliet"
 
+sushi<- sushi_df %>% select(1:10)
 setwd(paste0(getwd(),"/Data"))
 sushi_reviews <- list.files(path = getwd(), pattern = "sushi_review") %>% 
   lapply(read_csv) %>% bind_rows 
@@ -41,8 +42,7 @@ ui<- fluidPage(
                           titlePanel("Restaurant Stats"),
                           selectizeInput("state", "Select State", choices = c(" ", sort(unique(sushi$state))), selected=NULL), 
                           selectizeInput("city", "Select a City", choices = NULL, selected=NULL),
-                          selectizeInput("name", "Select a Restaurant", choices = NULL, selected=NULL)
-                          ),
+                          selectizeInput("name", "Select a Restaurant", choices = NULL, selected=NULL)),
                         mainPanel( 
                           valueBoxOutput("starbox", width=5),
                           valueBoxOutput("reviewbox", width =5),
@@ -60,7 +60,7 @@ ui<- fluidPage(
                                   ),
                       mainPanel(
                         #not sure what output is of wordvec()
-                        verbatimTextOutput("wordvecfun")
+                        # verbatimTextOutput("wordvecfun")
                         #sushi roll output
                                )
                       ), # end tab 2
@@ -101,6 +101,7 @@ wordvec=function(selected_business,keywords=c("service","rolls","fresh")){
 
 server<- function(input, output, session) {
   observeEvent(input$state, {
+    
     updateSelectizeInput(session, "city", "Select a City", server = TRUE, choices = c(" ", sort(unique(sushi$city[sushi$state == input$state]))))
     }, priority = 1)
 
@@ -108,30 +109,40 @@ server<- function(input, output, session) {
    updateSelectizeInput(session, "name", "Select a Restaurant", server = TRUE, choices = c(" ",sort(unique(sushi$name[which( sushi$state == input$state & sushi$city == input$city)]))))
   }, priority = 2)
   
-  
-  #not sure here what the output of wordvec() is. Change renderText({}) to whatever appropriate.
+
   business<- reactive({
-    sushi$business_id[which(sushi$name == input$name & sushi$city== input$city)]
+    if(!is.null(input$name)){
+      sushi$business_id[which(sushi$name == input$name & sushi$city== input$city)]
+    }
   })
-  output$wordvecfun<- renderText({wordvec(business(), input$choice)})
+  
+  
+  #output$wordvecfun<- renderText({wordvec(business(), input$choice)})
   
   
   stars<- reactive({
-    sushi$stars[which(sushi$name == input$name & sushi$city== input$city)]
+    if(!is.null(input$name)){
+      sushi$stars[which(sushi$name == input$name & sushi$city== input$city)]
+    }
   })
+  
   output$starbox <- shinydashboard::renderInfoBox({
-    shinydashboard::infoBox("Stars", stars(), icon = icon("thumbs-up", lib = "glyphicon"),
-      color = "yellow", fill=TRUE
-    )
+    if(!is.null(input$name)){
+      shinydashboard::infoBox("Stars", stars(), icon = icon("thumbs-up", lib = "glyphicon"),
+                              color = "yellow", fill=TRUE)
+    }
   })
   
   reviews<- reactive({
-    sushi$review_count[which(sushi$name == input$name & sushi$city== input$city)]
-  })
+    if(!is.null(input$name)){
+      sushi$review_count[which(sushi$name == input$name & sushi$city== input$city)]
+    }})
+  
   output$reviewbox <- shinydashboard::renderInfoBox({
-    shinydashboard::infoBox("# of Reviews", reviews(), icon = icon("list"),
-                            color = "blue", fill=TRUE)
-  })
+    if(!is.null(input$name)){
+      shinydashboard::infoBox("# of Reviews", reviews(), icon = icon("list"),
+                              color = "blue", fill=TRUE)
+    }})
   
   output$hist_all <- renderPlot({
     ggplot(sushi_reviews,aes(stars))+
@@ -142,8 +153,11 @@ server<- function(input, output, session) {
   })
   
   hist_chosen<- reactive({
-    sushi_reviews %>% filter(business_id == sushi$business_id[which(sushi$name == input$name & sushi$city== input$city)])
+    if(!is.null(input$name)){
+      sushi_reviews %>% filter(business_id == sushi$business_id[which(sushi$name == input$name & sushi$city== input$city)])
+    }
   })
+  
   output$hist_rest <- renderPlot({
     if(!is.null(hist_chosen())){
       ggplot(hist_chosen(), aes(stars))+
@@ -158,11 +172,8 @@ server<- function(input, output, session) {
         ylab("Count")+
         ggtitle("Review Ratings for Chosen Restaurant")
     }
-    
+
   })
 }
-
-  
-
 
 shinyApp(ui, server)
