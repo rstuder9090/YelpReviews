@@ -1,0 +1,275 @@
+---
+title: "LDA Review and Tips"
+author: "Jack Bressett"
+date: "2022-12-02"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(tidytext)
+library(topicmodels)
+
+reviews <- read_csv("sushi_reviews.csv"); colnames(reviews)[1] <- "index"
+
+business <- read_csv("sushi.csv")
+
+```
+
+
+
+```{r}
+review_counts <- reviews %>% 
+  group_by(business_id) %>% 
+  summarise(n = n())
+
+counts <- review_counts$n
+
+hist(counts)
+
+mean(counts)
+median(counts)
+var(counts)
+```
+
+Begin LDA analysis on all reviews
+
+```{r}
+word_counts <- reviews %>%
+  unnest_tokens(word,V10) %>%
+  anti_join(stop_words) %>% 
+  count(index,word)
+
+reviews_dtm <- word_counts %>%
+  cast_dtm(index, word, n)
+
+```
+
+```{r}
+reviews_lda <- LDA(reviews_dtm, k = 4, control = list(seed = 42))
+
+topics <- tidy(reviews_lda, matrix = "beta")
+
+memberships <- tidy(reviews_lda, matrix = "gamma")
+```
+
+
+
+```{r}
+save(topics, memberships, file = "all_reviews_LDA.rda")
+
+
+```
+
+
+
+```{r, fig.height=15,fig.width=15}
+top_terms <- topics %>%
+  group_by(topic) %>%
+  slice_max(beta, n = 30) %>%
+  mutate(term = reorder_within(term, beta, topic))
+
+ggplot(top_terms, aes(beta, term, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  scale_fill_brewer(palette = "Set2") +
+  scale_y_reordered()
+```
+
+```{r}
+run_LDA <- function(data,num_topics){
+    word_counts <- data %>%
+    unnest_tokens(word,V10) %>%
+    anti_join(stop_words) %>% 
+    count(index,word)
+  
+  reviews_dtm <- word_counts %>%
+    cast_dtm(index, word, n)
+  
+  reviews_lda <- LDA(reviews_dtm, k = num_topics, control = list(seed = 42))
+  return(reviews_lda)
+}
+
+viz_topics <- function(topics, n){
+  top_terms <- topics %>%
+  group_by(topic) %>%
+  slice_max(beta, n = n) %>%
+  mutate(term = reorder_within(term, beta, topic))
+
+ggplot(top_terms, aes(beta, term, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  scale_fill_brewer(palette = "Set2") +
+  scale_y_reordered()
+}
+
+```
+
+
+
+
+Run LDA for single business positive reviews
+```{r}
+
+single_business_positive <- reviews %>% 
+  filter(business_id == "ZnAr0AxYpEYK1ZHNc4fk7g" & stars > 3)
+
+
+test <- run_LDA(single_business_positive,2)
+
+
+topics <- tidy(test, matrix = "beta")
+
+memberships <- tidy(test, matrix = "gamma")
+
+viz_topics(topics, 10)
+
+```
+
+check good reviews with 'dont'
+```{r}
+single_business$V10[grepl("dont", single_business$V10, fixed = TRUE)]
+
+```
+
+
+Run LDA for single business negative reviews
+
+```{r}
+single_business_negative <- reviews %>% 
+  filter(business_id == "ZnAr0AxYpEYK1ZHNc4fk7g" & stars < 3)
+
+
+test <- run_LDA(single_business_negative,2)
+
+
+topics <- tidy(test, matrix = "beta")
+
+memberships <- tidy(test, matrix = "gamma")
+
+viz_topics(topics, 10)
+
+```
+
+```{r}
+kl_div <- function(p1, p2) {
+  p1 * log(p1 / p2) + (p2 - p2)
+}
+kl_mat <- function(p) {
+  K <- matrix(0, nrow = length(p), ncol = length(p))
+  
+  for (i in seq_along(p)) {
+    for (j in seq_len(i - 1)) {
+      K[i, j] <- kl_div(p[i], p[j])
+    }
+  }
+  K
+}
+discrepancy <- function(p, lambda = 1e-7) {
+  p <- (p + lambda) / sum(p + lambda) # Laplace smoothing
+  K <- kl_mat(p)
+  max(K)
+}
+```
+
+
+
+```{r}
+library(superheat)
+
+discriminative_terms <- topics %>%
+  group_by(term) %>%
+  mutate(D = discrepancy(beta)) %>%
+  ungroup() %>%
+  slice_max(D, n = 25) %>%
+  mutate(term = fct_reorder(term, -D))
+
+
+
+
+
+discriminative_terms %>%
+  select(-D) %>%
+  pivot_wider(names_from = "topic", values_from = "beta") %>%
+  column_to_rownames("term") %>%
+  superheat(
+    pretty.order.rows = TRUE,
+    left.label.size = 1.5,
+    left.label.text.size = 3,
+    bottom.label.size = 0.05,
+    legend = FALSE
+  )
+
+
+```
+
+```{r}
+single_business <- reviews %>% 
+  filter(business_id == "ZnAr0AxYpEYK1ZHNc4fk7g" & stars > 3)
+
+
+test <- run_LDA(single_business,2)
+
+
+topics <- tidy(test, matrix = "beta")
+
+memberships <- tidy(test, matrix = "gamma")
+
+
+discriminative_terms <- topics %>%
+  group_by(term) %>%
+  mutate(D = discrepancy(beta)) %>%
+  ungroup() %>%
+  slice_max(D, n = 25) %>%
+  mutate(term = fct_reorder(term, -D))
+
+
+
+
+
+discriminative_terms %>%
+  select(-D) %>%
+  pivot_wider(names_from = "topic", values_from = "beta") %>%
+  column_to_rownames("term") %>%
+  superheat(
+    pretty.order.rows = TRUE,
+    left.label.size = 1.5,
+    left.label.text.size = 3,
+    bottom.label.size = 0.05,
+    legend = FALSE
+  )
+
+
+
+```
+
+
+```{r}
+library(ggrepel)
+
+memberships %>% 
+  mutate(topic = as.factor(topic)) %>% 
+ggplot(aes(topic, gamma)) +
+  geom_point(position = position_jitter(h = 0.05, w = 0.3)) +
+  geom_text_repel(aes(label = document), size = 3) +
+  scale_color_brewer(palette = "Set1")
+
+```
+
+```{r}
+memberships %>%
+  arrange(document, topic) %>% 
+  filter(topic==2) %>% 
+  slice_max(gamma, n = 1)
+
+
+
+
+standout_review <- single_business %>% 
+  filter(index == 7938) %>% 
+  select(text)
+
+
+standout_review
+```
+
