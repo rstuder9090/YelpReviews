@@ -2,7 +2,9 @@ library(jsonlite)
 library(tidyverse)
 library(stringr)
 library(word2vec)
-
+library(tidytext)
+library(tm)
+library(syuzhet)
 wordvec=function(selected_business,keywords=c("service","rolls","fresh")){
   # read reviews for this particular business
   review=data.frame()
@@ -12,7 +14,7 @@ wordvec=function(selected_business,keywords=c("service","rolls","fresh")){
       filter(business_id==selected_business)
     review=rbind(review,reviewi)
   }
-  
+  # review$V10 <- tm_map(review$V10, removeNumbers)
   # average stars and the number of reviews
   avg_star=mean(review$stars)
   num_reviews=nrow(review)
@@ -24,18 +26,36 @@ wordvec=function(selected_business,keywords=c("service","rolls","fresh")){
   
   bad_review=review %>% filter(stars<3)
   good_review=review %>% filter(stars>3)
-  
-  model_good=word2vec(x=good_review$V10,type="skip-gram",dim=15,window=5,iter=20)
-  model_bad=word2vec(x=bad_review$V10,type="skip-gram",dim=15,window=5,iter=20)
+  sw=c(stop_words$word,"sushi",'dont','im','restaurant','dish','dishes','dinner')
+  model_good=word2vec(x=good_review$V10,type="cbow",dim=15,window=2,iter=5,stopwords=sw)
+  model_bad=word2vec(x=bad_review$V10,type="cbow",dim=15,window=2,iter=5,stopwords=sw)
   # we can change the keywords.
-  nn_good=predict(model_good,keywords,type="nearest",top_n=10)
-  nn_bad=predict(model_bad,keywords,type="nearest",top_n=10)
-  return(c(avg_star,num_reviews,hist,nn_good,nn_bad))
+  nn_good=predict(model_good,keywords,type="nearest",top_n=5)
+  nn_bad=predict(model_bad,keywords,type="nearest",top_n=5)
+  
+  # sentiment analysis
+  text <- iconv(review$V10)
+  s <- get_nrc_sentiment(text)
+  barplot(
+        sort(colSums(prop.table(s[, 1:8]))), 
+        horiz = TRUE, 
+        col='skyblue',
+        cex.names = 0.7, 
+        las = 1, 
+        main = "Emotions in Reviews", xlab="Percentage"
+    )
+  
+  bing_vector <- get_sentiment(text, method="bing")
+  senti_score=mean(bing_vector)
+  
+  my_list = list(avg_star=avg_star,num_reviews=num_reviews,
+                 goodword=nn_good,badword=nn_bad,hist=hist,senti_score=senti_score)
+  return(my_list)
 }
 
 
 #selected_business='vC2qm1y3Au5czBtbhc-DNw'   
 # take this business for example. It can be changed based on users' query
-
+a=wordvec('vC2qm1y3Au5czBtbhc-DNw',c('roll'))
 
 
