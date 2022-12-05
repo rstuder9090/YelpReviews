@@ -9,7 +9,7 @@ Created with R 4.1.1
 Contains any R code for cleaning, analysis, visualization, or Shiny App creation.
 - [datacleaning.R](Code/datacleaning.R) code to load the json files, filter on sushi restaurants, and create new variables for analysis steps.
 - [Plots.R](Code/Plots.R) code for creating EDA plots
-- [explore_ran.R](Code/explore_ran.R)
+- [word2Vec.R](Code/word2Vec.R)
 - [sushiMap.R](Code/sushiMap.R)
 - [TextAnalysis.R](Code/TextAnalysis.R)
 
