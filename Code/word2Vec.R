@@ -14,15 +14,14 @@ wordvec=function(selected_business,keywords=c("service","rolls","fresh")){
       filter(business_id==selected_business)
     review=rbind(review,reviewi)
   }
-  # review$V10 <- tm_map(review$V10, removeNumbers)
-  # average stars and the number of reviews
-  avg_star=mean(review$stars)
-  num_reviews=nrow(review)
-  
-  # histogram for stars of this business
-  hist=review %>% 
-    ggplot(aes(stars)) +
-    geom_histogram(fill="skyblue",binwidth=0.5)
+  # # average stars and the number of reviews
+  # avg_star=mean(review$stars)
+  # num_reviews=nrow(review)
+  # 
+  # # histogram for stars of this business
+  # hist=review %>% 
+  #   ggplot(aes(stars)) +
+  #   geom_histogram(fill="skyblue",binwidth=0.5)
   
   bad_review=review %>% filter(stars<3)
   good_review=review %>% filter(stars>3)
@@ -48,8 +47,7 @@ wordvec=function(selected_business,keywords=c("service","rolls","fresh")){
   bing_vector <- get_sentiment(text, method="bing")
   senti_score=mean(bing_vector)
   
-  my_list = list(avg_star=avg_star,num_reviews=num_reviews,
-                 goodword=nn_good,badword=nn_bad,hist=hist,senti_score=senti_score)
+  my_list = list(goodword=nn_good,badword=nn_bad,senti_score=senti_score,bing_vector)
   return(my_list)
 }
 
