@@ -1,0 +1,21 @@
+keywords,similarity,direction
+rainbow, 0.09822248,positive
+dragon, 0.082700655,positive
+volcano, 0.06505596,positive
+spider, 0.05476412,positive
+godzilla, 0.03794156,positive
+tiger, 0.023949167,positive
+dynamite, 0.019389512,positive
+california, 0.019356117,positive
+nemo, 0.016943628,positive
+sunshine, 0.016135937,positive
+spider, 0.30841097,negative
+california, 0.28429496,negative
+dragon, 0.16142091,negative
+rainbow, 0.06348156,negative
+godzilla, 0.030406343,negative
+caterpillar, 0.017445315,negative
+cali, 0.015267036,negative
+vegas, 0.013229868,negative
+crunchy, 0.011682846,negative
+crunch, 0.010022827,negative

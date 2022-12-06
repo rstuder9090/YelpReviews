@@ -1,0 +1,21 @@
+keywords,similarity,direction
+prompt, 0.13845329,positive
+impeccable, 0.07470306,positive
+customer, 0.052079193,positive
+speedy, 0.030404378,positive
+slow, 0.020772817,positive
+slower, 0.019614898,positive
+quick, 0.014292846,positive
+exceptional, 0.010011709,positive
+fast, 0.008757688,positive
+excellent, 0.005668367,positive
+slow, 0.50651544,negative
+customer, 0.18537505,negative
+horrible, 0.044976983,negative
+lousy, 0.028771037,negative
+poor, 0.02106411,negative
+atrocious, 0.0139650935,negative
+terrible, 0.012632573,negative
+horrific, 0.010301732,negative
+horrendous, 0.004574037,negative
+sucked, 0.0038104274,negative
