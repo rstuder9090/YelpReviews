@@ -17,11 +17,11 @@ Contains any R code for cleaning, analysis, visualization, or Shiny App creation
 - [LDA_Reviews_Tips.Rmd](Code/LDA_Reviews_Tips.Rmd) LDA analysis of reviews and tips datasets
 - [N-Gram_Calculation.ipynb](Code/N-Gram_Calculation.ipynb) Jupyter Notebook of N-Gram analysis
 - [Word_Counting_for_sushi_res.ipynb](Code/Word_Counting_for_sushi_res.ipynb) various distributions of ratings, words, and Word2Vec analysis
-- [app.R](Code/app.R) code for Shiny App production
 
 
 ## Data Folder
 Contains any clean or raw data
+- [Shiny](Data/Shiny/) folder for all files and scripts utilized in Shiny app production
 - [sushi.csv](Data/sushi.csv) cleaned business dataset
 - [sushi_tips.csv](Data/sushi_tips.csv) cleaned tips dataset
 - 10 [sushi_review](Data/sushi_review-1.csv) cleaned reviews dataset - split in 10 files
