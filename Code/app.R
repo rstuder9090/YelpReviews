@@ -79,46 +79,6 @@ ui<- fluidPage(
              ) # end navbarPage
 ) # end UI
 
-# function
-wordvec=function(selected_business,keywords=c("service","rolls","fresh")){
-  # read reviews for this particular business
-  review<- sushi_reviews %>% filter(business_id == selected_business)
-  # # average stars and the number of reviews
-  # avg_star=mean(review$stars)
-  # num_reviews=nrow(review)
-  # # histogram for stars of this business
-  # hist=review %>% 
-  #   ggplot(aes(stars)) +
-  #   geom_histogram(fill="skyblue",binwidth=0.5)
-  bad_review=review %>% filter(stars<3)
-  good_review=review %>% filter(stars>3)
-  sw=c(stop_words$word,"sushi",'dont','im','restaurant','dish','dishes','dinner')
-  model_good=word2vec(x=good_review$V10,type="cbow",dim=15,window=2,iter=5,stopwords=sw)
-  model_bad=word2vec(x=bad_review$V10,type="cbow",dim=15,window=2,iter=5,stopwords=sw)
-  # we can change the keywords.
-  nn_good=predict(model_good,keywords,type="nearest",top_n=7)
-  nn_bad=predict(model_bad,keywords,type="nearest",top_n=7)
-  
-  # sentiment analysis
-  text <- iconv(review$V10)
-  s <- get_nrc_sentiment(text)
-  barplot(
-    sort(colSums(prop.table(s[, 1:8]))), 
-    horiz = TRUE, 
-    col='skyblue',
-    cex.names = 0.7, 
-    las = 1, 
-    main = "Emotions in Reviews", xlab="Percentage"
-  )
-  
-  bing_vector <- get_sentiment(text, method="bing")
-  senti_score=mean(bing_vector)
-  
-  my_list = list(goodword=nn_good,badword=nn_bad,hist=hist,senti_score=senti_score)
-  return(my_list)
-}
-
-
 
 server<- function(input, output, session) {
   observeEvent(input$state, {
