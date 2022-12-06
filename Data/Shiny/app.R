@@ -21,6 +21,7 @@ ui<- fluidPage(
                           selectizeInput("city", "Select a City", choices = NULL, selected=NULL),
                           selectizeInput("name", "Select a Restaurant", choices = NULL, selected=NULL)),
                         mainPanel( 
+                          tags$style(".recalculating { opacity: inherit !important; }"),
                           verticalLayout(
                             fluidRow(valueBoxOutput("starbox"),valueBoxOutput("reviewbox"),valueBoxOutput("sentbox")),
                           splitLayout(cellWidths = c("50%", "50%"), plotOutput("hist_all"), plotOutput("hist_rest")),
@@ -39,15 +40,28 @@ ui<- fluidPage(
              
              tabPanel("Word2Vec", fluid=TRUE,
                       sidebarPanel(
-                        titlePanel("Title"),
                         selectInput("choice", "Select what element you'd like to analyze", choices = c("service","roll"))
                       ),
                       mainPanel(
                         plotOutput("vecplot")
                       )
-             ) # end tab 3
-             ) # end navbarPage
-) # end UI
+             ), #end tab3
+             tabPanel("About", fluid = TRUE,
+                      mainPanel(
+                        h2("Project for UW-Madison STAT 628 Module 3"),
+                        h4("Authors: Jack Bressett, Rachel Studer, Ran Zhao"),
+                        br(),
+                        h4("The goal of this project is to parse through Yelp Review data to help 
+                           businesses find information on themselves and what topics patron's talk 
+                           about in good reviews, bad reviews, and tips. Understanding topics and 
+                           concepts between different levels of reviews will help sushi restaurants' 
+                           strive for better ratings."),
+                        br(),
+                        em("For error reporting or questions please contact rlstuder@wisc.edu")
+                      )
+               
+             ) # end tab 4
+             )) # end UI
 
 
 condition <- function(x){ x == " " | x == ""}  #Define condition expression to fix bugs regarding input$name == null
