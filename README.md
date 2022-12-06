@@ -7,6 +7,8 @@ Parsing through Yelp Review data to help businesses find information on themselv
 
 Created with R 4.1.1
 
+[Shiny App link](https://rstuder9090.shinyapps.io/Yelp_Shiny/)
+
 ## Code Folder
 Contains any R code for cleaning, analysis, visualization, or Shiny App creation.
 - [datacleaning.R](Code/datacleaning.R) code to load the json files, filter on sushi restaurants, and create new variables for analysis steps.
