@@ -3,6 +3,7 @@ library(tidyverse) #includes many relevant packages
 library(word2vec)
 library(ggplot2)
 library(shinyWidgets)
+library(shinydashboard)
 
 
 sushi<- read_csv("app_business_data.csv"); sushi <- rename(sushi, index = `...1`)
