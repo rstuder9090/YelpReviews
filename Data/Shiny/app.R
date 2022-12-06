@@ -5,9 +5,9 @@ library(ggplot2)
 library(shinyWidgets)
 
 
-sushi<- read_csv("Data/app_data/app_business_data.csv"); sushi <- rename(sushi, index = `...1`)
+sushi<- read_csv("app_business_data.csv"); sushi <- rename(sushi, index = `...1`)
 
-sushi_reviews_stars <- read_csv("Data/app_data/stars_all_reviews.csv"); sushi_reviews_stars <- rename(sushi_reviews_stars, index = `...1`)
+sushi_reviews_stars <- read_csv("stars_all_reviews.csv"); sushi_reviews_stars <- rename(sushi_reviews_stars, index = `...1`)
 
 ui<- fluidPage(
   useShinydashboard(),
@@ -138,7 +138,7 @@ server<- function(input, output, session) {
 
   s<- reactive({
     if(!is.null(sentimentfile())){
-    read_csv(paste0("Data/sentiment/", sentimentfile()))}
+    read_csv(paste0("sentiment/", sentimentfile()))}
   })
   
   sentiment_score<- reactive({
@@ -170,7 +170,7 @@ server<- function(input, output, session) {
  
  d<-reactive({
    if(!is.null(vecfile())){
-     read_csv(paste0("Data/", vecfile())) %>% filter(direction=='positive')}
+     read_csv(vecfile()) %>% filter(direction=='positive')}
  })
  
  output$vecplot<- renderPlot({
