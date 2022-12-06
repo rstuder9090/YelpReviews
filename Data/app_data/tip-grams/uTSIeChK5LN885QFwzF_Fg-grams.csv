@@ -1,0 +1,17 @@
+,1-Gram,Frequency,Percent Total 1-Grams,2-Gram,Frequency,Percent Total 2-Grams,3-Gram,Frequency,Percent Total 3-Grams
+0,"('best',)",2,0.11764705882352941,"('stop', 'sending')",1,0.0625,"('stop', 'sending', 'notifocationd')",1.0,0.06666666666666667
+1,"('stop',)",1,0.058823529411764705,"('sending', 'notifocationd')",1,0.0625,"('sending', 'notifocationd', 'best')",1.0,0.06666666666666667
+2,"('sending',)",1,0.058823529411764705,"('notifocationd', 'best')",1,0.0625,"('notifocationd', 'best', 'area')",1.0,0.06666666666666667
+3,"('notifocationd',)",1,0.058823529411764705,"('best', 'area')",1,0.0625,"('best', 'area', 'creative')",1.0,0.06666666666666667
+4,"('area',)",1,0.058823529411764705,"('area', 'creative')",1,0.0625,"('area', 'creative', 'dishes')",1.0,0.06666666666666667
+5,"('creative',)",1,0.058823529411764705,"('creative', 'dishes')",1,0.0625,"('creative', 'dishes', 'fresh')",1.0,0.06666666666666667
+6,"('dishes',)",1,0.058823529411764705,"('dishes', 'fresh')",1,0.0625,"('dishes', 'fresh', 'ingredientsa')",1.0,0.06666666666666667
+7,"('fresh',)",1,0.058823529411764705,"('fresh', 'ingredientsa')",1,0.0625,"('fresh', 'ingredientsa', 'true')",1.0,0.06666666666666667
+8,"('ingredientsa',)",1,0.058823529411764705,"('ingredientsa', 'true')",1,0.0625,"('ingredientsa', 'true', 'dining')",1.0,0.06666666666666667
+9,"('true',)",1,0.058823529411764705,"('true', 'dining')",1,0.0625,"('true', 'dining', 'experience')",1.0,0.06666666666666667
+10,"('dining',)",1,0.058823529411764705,"('dining', 'experience')",1,0.0625,"('dining', 'experience', 'now')",1.0,0.06666666666666667
+11,"('experience',)",1,0.058823529411764705,"('experience', 'now')",1,0.0625,"('experience', 'now', 'open')",1.0,0.06666666666666667
+12,"('now',)",1,0.058823529411764705,"('now', 'open')",1,0.0625,"('now', 'open', 'best')",1.0,0.06666666666666667
+13,"('open',)",1,0.058823529411764705,"('open', 'best')",1,0.0625,"('open', 'best', '100')",1.0,0.06666666666666667
+14,"('100',)",1,0.058823529411764705,"('best', '100')",1,0.0625,"('best', '100', 'delicious')",1.0,0.06666666666666667
+15,"('delicious',)",1,0.058823529411764705,"('100', 'delicious')",1,0.0625,,,

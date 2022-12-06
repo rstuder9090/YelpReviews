@@ -1,0 +1,25 @@
+,1-Gram,Frequency,Percent Total 1-Grams,2-Gram,Frequency,Percent Total 2-Grams,3-Gram,Frequency,Percent Total 3-Grams
+0,"('good',)",4.0,0.16,"('closed', 'shame')",1,0.041666666666666664,"('closed', 'shame', 'good')",1.0,0.043478260869565216
+1,"('closed',)",1.0,0.04,"('shame', 'good')",1,0.041666666666666664,"('go', 'youll', 'hugely')",1.0,0.043478260869565216
+2,"('go',)",1.0,0.04,"('service', 'good')",1,0.041666666666666664,"('specialsfriendly', 'service', 'good')",1.0,0.043478260869565216
+3,"('service',)",1.0,0.04,"('specialsfriendly', 'service')",1,0.041666666666666664,"('lunch', 'specialsfriendly', 'service')",1.0,0.043478260869565216
+4,"('specialsfriendly',)",1.0,0.04,"('lunch', 'specialsfriendly')",1,0.041666666666666664,"('good', 'lunch', 'specialsfriendly')",1.0,0.043478260869565216
+5,"('lunch',)",1.0,0.04,"('good', 'lunch')",1,0.041666666666666664,"('reasonable', 'good', 'lunch')",1.0,0.043478260869565216
+6,"('reasonable',)",1.0,0.04,"('reasonable', 'good')",1,0.041666666666666664,"('prices', 'reasonable', 'good')",1.0,0.043478260869565216
+7,"('prices',)",1.0,0.04,"('prices', 'reasonable')",1,0.041666666666666664,"('good', 'prices', 'reasonable')",1.0,0.043478260869565216
+8,"('disappointed',)",1.0,0.04,"('good', 'prices')",1,0.041666666666666664,"('disappointed', 'good', 'prices')",1.0,0.043478260869565216
+9,"('hugely',)",1.0,0.04,"('disappointed', 'good')",1,0.041666666666666664,"('hugely', 'disappointed', 'good')",1.0,0.043478260869565216
+10,"('youll',)",1.0,0.04,"('hugely', 'disappointed')",1,0.041666666666666664,"('youll', 'hugely', 'disappointed')",1.0,0.043478260869565216
+11,"('dont',)",1.0,0.04,"('youll', 'hugely')",1,0.041666666666666664,"('dont', 'go', 'youll')",1.0,0.043478260869565216
+12,"('shame',)",1.0,0.04,"('go', 'youll')",1,0.041666666666666664,"('shame', 'good', 'now')",1.0,0.043478260869565216
+13,"('hibachi',)",1.0,0.04,"('dont', 'go')",1,0.041666666666666664,"('hibachi', 'dont', 'go')",1.0,0.043478260869565216
+14,"('amazing',)",1.0,0.04,"('hibachi', 'dont')",1,0.041666666666666664,"('amazing', 'hibachi', 'dont')",1.0,0.043478260869565216
+15,"('around',)",1.0,0.04,"('amazing', 'hibachi')",1,0.041666666666666664,"('around', 'amazing', 'hibachi')",1.0,0.043478260869565216
+16,"('best',)",1.0,0.04,"('around', 'amazing')",1,0.041666666666666664,"('best', 'around', 'amazing')",1.0,0.043478260869565216
+17,"('colombian',)",1.0,0.04,"('best', 'around')",1,0.041666666666666664,"('colombian', 'best', 'around')",1.0,0.043478260869565216
+18,"('serving',)",1.0,0.04,"('colombian', 'best')",1,0.041666666666666664,"('serving', 'colombian', 'best')",1.0,0.043478260869565216
+19,"('also',)",1.0,0.04,"('serving', 'colombian')",1,0.041666666666666664,"('also', 'serving', 'colombian')",1.0,0.043478260869565216
+20,"('now',)",1.0,0.04,"('also', 'serving')",1,0.041666666666666664,"('now', 'also', 'serving')",1.0,0.043478260869565216
+21,"('close',)",1.0,0.04,"('now', 'also')",1,0.041666666666666664,"('good', 'now', 'also')",1.0,0.043478260869565216
+22,,,,"('good', 'now')",1,0.041666666666666664,"('service', 'good', 'close')",1.0,0.043478260869565216
+23,,,,"('good', 'close')",1,0.041666666666666664,,,

@@ -1,0 +1,27 @@
+,1-Gram,Frequency,Percent Total 1-Grams,2-Gram,Frequency,Percent Total 2-Grams,3-Gram,Frequency,Percent Total 3-Grams
+0,"('great',)",2.0,0.07407407407407407,"('favorite', 'restaurant')",1,0.038461538461538464,"('favorite', 'restaurant', 'philly')",1.0,0.04
+1,"('oil',)",2.0,0.07407407407407407,"('restaurant', 'philly')",1,0.038461538461538464,"('specials', 'cook', 'vegetable')",1.0,0.04
+2,"('favorite',)",1.0,0.037037037037037035,"('service', 'pleasing')",1,0.038461538461538464,"('customer', 'service', 'pleasing')",1.0,0.04
+3,"('specials',)",1.0,0.037037037037037035,"('customer', 'service')",1,0.038461538461538464,"('great', 'customer', 'service')",1.0,0.04
+4,"('pleasing',)",1.0,0.037037037037037035,"('great', 'customer')",1,0.038461538461538464,"('great', 'great', 'customer')",1.0,0.04
+5,"('service',)",1.0,0.037037037037037035,"('great', 'great')",1,0.038461538461538464,"('decent', 'great', 'great')",1.0,0.04
+6,"('customer',)",1.0,0.037037037037037035,"('decent', 'great')",1,0.038461538461538464,"('oil', 'decent', 'great')",1.0,0.04
+7,"('decent',)",1.0,0.037037037037037035,"('oil', 'decent')",1,0.038461538461538464,"('peanut', 'oil', 'decent')",1.0,0.04
+8,"('peanut',)",1.0,0.037037037037037035,"('peanut', 'oil')",1,0.038461538461538464,"('said', 'peanut', 'oil')",1.0,0.04
+9,"('said',)",1.0,0.037037037037037035,"('said', 'peanut')",1,0.038461538461538464,"('oil', 'said', 'peanut')",1.0,0.04
+10,"('vegetable',)",1.0,0.037037037037037035,"('oil', 'said')",1,0.038461538461538464,"('vegetable', 'oil', 'said')",1.0,0.04
+11,"('cook',)",1.0,0.037037037037037035,"('vegetable', 'oil')",1,0.038461538461538464,"('cook', 'vegetable', 'oil')",1.0,0.04
+12,"('winesake',)",1.0,0.037037037037037035,"('cook', 'vegetable')",1,0.038461538461538464,"('winesake', 'specials', 'cook')",1.0,0.04
+13,"('restaurant',)",1.0,0.037037037037037035,"('specials', 'cook')",1,0.038461538461538464,"('restaurant', 'philly', 'next')",1.0,0.04
+14,"('running',)",1.0,0.037037037037037035,"('winesake', 'specials')",1,0.038461538461538464,"('running', 'winesake', 'specials')",1.0,0.04
+15,"('will',)",1.0,0.037037037037037035,"('running', 'winesake')",1,0.038461538461538464,"('will', 'running', 'winesake')",1.0,0.04
+16,"('thanksgiving',)",1.0,0.037037037037037035,"('will', 'running')",1,0.038461538461538464,"('thanksgiving', 'will', 'running')",1.0,0.04
+17,"('week',)",1.0,0.037037037037037035,"('thanksgiving', 'will')",1,0.038461538461538464,"('week', 'thanksgiving', 'will')",1.0,0.04
+18,"('available',)",1.0,0.037037037037037035,"('week', 'thanksgiving')",1,0.038461538461538464,"('available', 'week', 'thanksgiving')",1.0,0.04
+19,"('bar',)",1.0,0.037037037037037035,"('available', 'week')",1,0.038461538461538464,"('bar', 'available', 'week')",1.0,0.04
+20,"('full',)",1.0,0.037037037037037035,"('bar', 'available')",1,0.038461538461538464,"('full', 'bar', 'available')",1.0,0.04
+21,"('vic',)",1.0,0.037037037037037035,"('full', 'bar')",1,0.038461538461538464,"('vic', 'full', 'bar')",1.0,0.04
+22,"('next',)",1.0,0.037037037037037035,"('vic', 'full')",1,0.038461538461538464,"('next', 'vic', 'full')",1.0,0.04
+23,"('philly',)",1.0,0.037037037037037035,"('next', 'vic')",1,0.038461538461538464,"('philly', 'next', 'vic')",1.0,0.04
+24,"('atmosphere',)",1.0,0.037037037037037035,"('philly', 'next')",1,0.038461538461538464,"('service', 'pleasing', 'atmosphere')",1.0,0.04
+25,,,,"('pleasing', 'atmosphere')",1,0.038461538461538464,,,
