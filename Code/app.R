@@ -16,21 +16,19 @@ ui<- fluidPage(
   useShinydashboard(),
   titlePanel("Sushi Restaurant "),
   navbarPage("Navigation",
-             tabPanel("tab 1", fluid = TRUE,
+             tabPanel("Statistics", fluid = TRUE,
                         sidebarPanel(width=3,
                           titlePanel("Restaurant Stats"),
                           selectizeInput("state", "Select State", choices = c(" ", sort(unique(sushi$state))), selected=NULL), 
                           selectizeInput("city", "Select a City", choices = NULL, selected=NULL),
                           selectizeInput("name", "Select a Restaurant", choices = NULL, selected=NULL)),
                         mainPanel( 
-                          valueBoxOutput("starbox", width=5),
-                          valueBoxOutput("reviewbox", width =5),
-                          plotOutput("hist_all"),
-                          conditionalPanel(
-                            condition =  "!is.null(hist_chosen())",      #This code panel not working as intended consider removing 
-                            plotOutput("hist_rest"))
+                          verticalLayout(
+                            fluidRow(valueBoxOutput("starbox"),valueBoxOutput("reviewbox"),valueBoxOutput("sentbox")),
+                          splitLayout(cellWidths = c("50%", "50%"), plotOutput("hist_all"), plotOutput("hist_rest")),
+                          plotOutput("sent_plot")
                           # more basics about restaurant performance - compared to average sushi?
-                          ),
+                          )),
                       ), #end tab 1
               tabPanel("Topic Analysis", fluid=TRUE,
                       sidebarPanel(titlePanel("Title"),
@@ -44,12 +42,10 @@ ui<- fluidPage(
              tabPanel("Word2Vec", fluid=TRUE,
                       sidebarPanel(
                         titlePanel("Title"),
-                        selectInput("choice", "Select what element you'd like to analyze", choices = c("service","rolls","fresh"))
+                        selectInput("choice", "Select what element you'd like to analyze", choices = c("service","roll"))
                       ),
                       mainPanel(
-                        #not sure what output is of wordvec()
-                        # verbatimTextOutput("wordvecfun")
-                        #sushi roll output
+                        plotOutput("vecplot")
                       )
              ) # end tab 3
              ) # end navbarPage
@@ -58,27 +54,6 @@ ui<- fluidPage(
 
 condition <- function(x){ x == " " | x == ""}  #Define condition expression to fix bugs regarding input$name == null
 
-
-# function
-wordvec=function(selected_business,keywords=c("service","rolls","fresh")){
-  # read reviews for this particular business
-  review<- sushi_reviews %>% filter(business_id == selected_business)
-  # average stars and the number of reviews
-  avg_star=mean(review$stars)
-  num_reviews=nrow(review)
-  # histogram for stars of this business
-  hist=review %>% 
-    ggplot(aes(stars)) +
-    geom_histogram(fill="skyblue",binwidth=0.5)
-  bad_review=review %>% filter(stars<3)
-  good_review=review %>% filter(stars>3)
-  model_good=word2vec(x=good_review$V10,type="skip-gram",dim=15,window=5,iter=20)
-  model_bad=word2vec(x=bad_review$V10,type="skip-gram",dim=15,window=5,iter=20)
-  # we can change the keywords.
-  nn_good=predict(model_good,keywords,type="nearest",top_n=10)
-  nn_bad=predict(model_bad,keywords,type="nearest",top_n=10)
-  return(c(avg_star,num_reviews,hist,nn_good,nn_bad))
-}
 
 
 
@@ -99,9 +74,6 @@ server<- function(input, output, session) {
     }
   })
   
-
-  
-  #output$wordvecfun<- renderText({wordvec(business(), input$choice)})
   
   stars <- reactive({
     if(!is.null(input$name)){
@@ -109,10 +81,11 @@ server<- function(input, output, session) {
     }
   })
   
-  output$starbox <- shinydashboard::renderInfoBox({
+  output$starbox <- shinydashboard::renderValueBox({
     if(!is.null(input$name)){
-      shinydashboard::infoBox("Stars", stars(), icon = icon("thumbs-up", lib = "glyphicon"),
-                              color = "yellow", fill=TRUE)
+      shinydashboard::valueBox(tags$p(stars(), style = "font-size: 20px;"),"Stars", 
+                               icon = tags$i(icon("thumbs-up", lib = "glyphicon"), style="font-size: 30px; color: white"),
+                              color = "yellow")
     }
   })
   
@@ -121,10 +94,11 @@ server<- function(input, output, session) {
       sushi$review_count[which(sushi$name == input$name & sushi$city== input$city)]
     }})
   
-  output$reviewbox <- shinydashboard::renderInfoBox({
+  output$reviewbox <- shinydashboard::renderValueBox({
     if(!is.null(input$name)){
-      shinydashboard::infoBox("# of Reviews", reviews(), icon = icon("list"),
-                              color = "blue", fill=TRUE)
+      shinydashboard::valueBox(tags$p(reviews(), style = "font-size: 20px;"),"# of Reviews", 
+                               icon = tags$i(icon("list"), style="font-size: 30px; color: white"),
+                              color = "blue")
     }})
   
   output$hist_all <- renderPlot({
@@ -157,6 +131,62 @@ server<- function(input, output, session) {
     }
     
   })
-}
+  
+  sentimentfile<- reactive({
+    if(!condition(input$name)){
+      paste0(business(), ".csv")
+    }
+  })
+    
+
+  s<- reactive({
+    if(!is.null(sentimentfile())){
+    read_csv(paste0("sentiment/", sentimentfile()))}
+  })
+  
+  sentiment_score<- reactive({
+    if(!is.null(s())){
+    round(mean(s()$score),3) }
+    })
+  
+  output$sentbox <- shinydashboard::renderValueBox({
+      shinydashboard::valueBox(tags$p(sentiment_score(), style = "font-size: 20px;"),"Sentiment Score", 
+                               icon = tags$i(icon("cog", lib = "glyphicon"), style="font-size: 30px; color: white"),
+                              color = "blue")
+    })
+  
+ output$sent_plot<- renderPlot({
+   if(!is.null(s())){
+     barplot(
+       sort(colSums(prop.table(s()[, 1:8]))),
+       horiz = TRUE,
+       col='skyblue',
+       cex.names = 0.7,
+       las = 1,
+       main = "Emotions in Reviews", xlab="Percentage") 
+   }
+ }) 
+ 
+ vecfile<- reactive({
+   paste0("word2vec_", input$choice, ".csv")
+ })
+ 
+ d<-reactive({
+   if(!is.null(vecfile())){
+     read_csv(vecfile()) %>% filter(direction=='positive')}
+ })
+ 
+ output$vecplot<- renderPlot({
+     ggplot(d(), aes(x=reorder(keywords,similarity),y=similarity)) + 
+     geom_col(fill='skyblue')+
+     labs(x="Keywords",y='Similarity',title=paste0("Top 10 Keywords Related to ", input$choice))+
+     theme(plot.title = element_text(size=22), axis.title=element_text(size=16), 
+           axis.text.y=element_text(size=12), 
+           axis.text.x = element_text(size=12, angle = 45, hjust=1))
+ })
+ 
+ 
+ 
+} # end of server
 
 shinyApp(ui, server)
