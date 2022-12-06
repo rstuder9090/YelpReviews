@@ -168,12 +168,12 @@ server<- function(input, output, session) {
  }) 
  
  vecfile<- reactive({
-   paste0("../Data/word2vec_", input$choice, ".csv")
+   paste0("word2vec_", input$choice, ".csv")
  })
  
  d<-reactive({
    if(!is.null(vecfile())){
-     read_csv(vecfile()) %>% filter(direction=='positive')}
+     read_csv(paste0("../Data/", vecfile())) %>% filter(direction=='positive')}
  })
  
  output$vecplot<- renderPlot({
