@@ -1,6 +1,7 @@
 # take business_id=='vC2qm1y3Au5czBtbhc-DNw' for example
 
 s <- read.csv('Data/sentiment/vC2qm1y3Au5czBtbhc-DNw.csv')
+sentiment_score=mean(s$score)
 barplot(
   sort(colSums(prop.table(s[, 1:8]))),
   horiz = TRUE,
