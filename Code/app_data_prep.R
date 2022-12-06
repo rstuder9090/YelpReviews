@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 library(tidyverse)
 
 
@@ -47,7 +47,7 @@ write.csv(stars_all_reviews, 'app_data/stars_all_reviews.csv')
 
 
 
-=======
+
 library(tidyverse)
 
 
@@ -242,6 +242,3 @@ print(quote_path)
 write.csv(standout_tips, quote_path)
 
 
-
-
->>>>>>> 4f120471a43f0eef0112ac99d3e9fe115c2ac803

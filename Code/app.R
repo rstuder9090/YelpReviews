@@ -55,8 +55,7 @@ ui<- fluidPage(
              ) # end navbarPage
 ) # end UI
 
-<<<<<<< HEAD
-=======
+
 condition <- function(x){ x == " " | x == ""}  #Define condition expression to fix bugs regarding input$name == null
 
 
@@ -82,7 +81,6 @@ wordvec=function(selected_business,keywords=c("service","rolls","fresh")){
 }
 
 
->>>>>>> 5e9b0abbb7547ad4e24996863b737c115cd38782
 
 server<- function(input, output, session) {
   observeEvent(input$state, {
