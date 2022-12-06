@@ -1,7 +1,10 @@
 # YelpReviews
-Jack Bressett, Rachel Studer, Ran Zhao\
+Jack Bressett, Rachel Studer, Ran Zhao
+
 Project for UW-Madison STAT 628 Module 3 - Group 14
-Parsing through Yelp Review data to help businesses find information on themselves and what topics patron's talk about in good reviews, bad reviews, and tips. Understanding topics and concepts between different levels of reviews will help sushi restaurants' strive for better ratings.\
+
+Parsing through Yelp Review data to help businesses find information on themselves and what topics patron's talk about in good reviews, bad reviews, and tips. Understanding topics and concepts between different levels of reviews will help sushi restaurants' strive for better ratings.
+
 Created with R 4.1.1
 
 ## Code Folder
