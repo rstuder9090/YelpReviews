@@ -5,7 +5,7 @@ library(tidyverse)
 sushi_df<- read_csv("sushi.csv")
 sushi<- sushi_df %>% select(1:10)
 
-sushi$city[which(sushi$city == "Tuscon" & sushi$state == "FL" )] <- "Tucson"
+sushi$city[which(sushi$city == "Tuscon" & sushi$state == "AZ" )] <- "Tucson"
 sushi$city[which(sushi$city == "Clearwater Beach" & sushi$state == "FL" )] <- "Clearwater"
 sushi$city[which(sushi$city == "Land o lakes" & sushi$state == "FL" )] <- "Land O Lakes"
 sushi$city[which((sushi$city == "St Petersburg" | sushi$city == "St. Petersburg") & sushi$state=="FL" )] <- "Saint Petersburg"
