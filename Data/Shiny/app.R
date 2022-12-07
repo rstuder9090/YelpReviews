@@ -41,7 +41,7 @@ ui<- fluidPage(
              
              tabPanel("Word2Vec", fluid=TRUE,
                       sidebarPanel(
-                        selectInput("choice", "Select what element you'd like to analyze", choices = c("service","roll"))
+                        selectInput("choice", "Select what element you'd like to analyze", choices = c("Service","Roll"))
                       ),
                       mainPanel(
                         verticalLayout(
