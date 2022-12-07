@@ -196,7 +196,7 @@ write.csv(standout_tips, quote_path)
 
 #Format n-gram files together to account for shiny publish constraint ----------Reviews
 
-filepath <- "app_data/review-grams/"
+filepath <- "review-grams/"
 myfiles <- list.files(path = filepath, pattern = "csv", full.names = TRUE)
 
 set_names <- c('Rank', '1-Gram', 'Frequency-1', 'Percent-Total-1','2-Gram', 'Frequency-2', 'Percent-Total-2','3-Gram', 'Frequency-3', 'Percent-Total-3', 'type', 'business_id')
@@ -232,6 +232,30 @@ bad_review_grams <- data %>%
 good_review_grams <- data %>% 
   filter(type=="good")
 
+
+
+
+temp <- gsub("-good-grams.csv", "", myfiles)
+temp <- gsub("-bad-grams.csv", "", temp)
+
+temp <- gsub("review-grams/", "", temp)
+
+k <- 1
+for(i in 1:nrow(tester)){
+  if(tester$Rank[i]==0 ){
+    current_id <- temp[k]
+    k <- k + 1
+    print(k)
+  }
+  
+  tester$business_id[i] <- current_id
+  
+}
+
+
+
+
+
 write.csv(bad_review_grams,'app_data/bad_reviews_grams.csv')
 
 write.csv(good_review_grams,'app_data/good_reviews_grams.csv')
@@ -246,7 +270,7 @@ test <- read_csv('app_data/good_reviews_grams.csv')
 
 #Format n-gram files together to account for shiny publish constraint
 
-filepath <- "app_data/tip-grams/"
+filepath <- "tips-grams/"
 myfiles <- list.files(path = filepath, pattern = "csv", full.names = TRUE)
 
 set_names <- c('Rank', '1-Gram', 'Frequency-1', 'Percent-Total-1','2-Gram', 'Frequency-2', 'Percent-Total-2','3-Gram', 'Frequency-3', 'Percent-Total-3', 'business_id')
@@ -254,7 +278,7 @@ set_names <- c('Rank', '1-Gram', 'Frequency-1', 'Percent-Total-1','2-Gram', 'Fre
 data <- data.frame(matrix(ncol = 11)); colnames(data) <- set_names
 
 for(file in myfiles){
-  temp = str_split(myfiles[2],"/")[[1]][3]
+  temp = str_split(file,"/")[[1]][3]
   temp = str_split(temp,"-gram")
   bus_id = temp[[1]][1]
   
@@ -266,10 +290,32 @@ for(file in myfiles){
 }
 
 
-data
+tester <- data
+
+tester = tester[-1,]
+
+temp <- gsub("-grams.csv", "", myfiles)
+temp <- gsub("tips-grams/", "", temp)
+
+k <- 1
+for(i in 1:nrow(tester)){
+  if(tester$Rank[i]==0 ){
+    current_id <- temp[k]
+    k <- k + 1
+    print(k)
+  }
+  
+  tester$business_id[i] <- current_id
+  
+}
+
+tester$Rank[2]
+
+tail(tester)
+
+write.csv(tester,'tips_grams.csv')
+
+read_csv('tips_grams.csv')
 
 
-write.csv(data,'app_data/tips_grams.csv')
-
-read_csv('app_data/tips_grams.csv')
 
