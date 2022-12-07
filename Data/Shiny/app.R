@@ -1,6 +1,5 @@
 library(shiny)
 library(tidyverse) #includes many relevant packages
-library(word2vec)
 library(ggplot2)
 library(shinyWidgets)
 library(shinydashboard)
@@ -39,7 +38,7 @@ ui<- fluidPage(
                                )
                       ), # end tab 2
              
-             tabPanel("Word2Vec", fluid=TRUE,
+             tabPanel("Likes & Dislikes", fluid=TRUE,
                       sidebarPanel(
                         selectInput("choice", "Select what element you'd like to analyze", choices = c("Service","Roll"))
                       ),
