@@ -24,6 +24,7 @@ ui<- fluidPage(
                           tags$style(".recalculating { opacity: inherit !important; }"),
                           verticalLayout(
                             fluidRow(valueBoxOutput("starbox"),valueBoxOutput("reviewbox"),valueBoxOutput("sentbox")),
+                           h3(htmlOutput("note")),
                           splitLayout(cellWidths = c("50%", "50%"), plotOutput("hist_all"), plotOutput("hist_rest")),
                           plotOutput("sent_plot")
                           # more basics about restaurant performance - compared to average sushi?
@@ -43,7 +44,10 @@ ui<- fluidPage(
                         selectInput("choice", "Select what element you'd like to analyze", choices = c("service","roll"))
                       ),
                       mainPanel(
-                        plotOutput("vecplot")
+                        verticalLayout(
+                        fluidRow(plotOutput("vecplot1")),
+                        fluidRow(plotOutput("vecplot2"))
+                        )
                       )
              ), #end tab3
              tabPanel("About", fluid = TRUE,
@@ -158,13 +162,17 @@ server<- function(input, output, session) {
   
   sentiment_score<- reactive({
     if(!is.null(s())){
-    round(mean(s()$score),3) }
+    round(mean(s()$score),2) }
     })
+  
+  output$note<- renderText({
+    paste0("Your restaurant has ",sentiment_score(), " more positive than negative words in the ", reviews(), " reviews provided." )
+  })
   
   output$sentbox <- shinydashboard::renderValueBox({
       shinydashboard::valueBox(tags$p(sentiment_score(), style = "font-size: 20px;"),"Sentiment Score", 
                                icon = tags$i(icon("cog", lib = "glyphicon"), style="font-size: 30px; color: white"),
-                              color = "blue")
+                              color = "green")
     })
   
  output$sent_plot<- renderPlot({
@@ -183,20 +191,33 @@ server<- function(input, output, session) {
    paste0("word2vec_", input$choice, ".csv")
  })
  
- d<-reactive({
+ pos<-reactive({
    if(!is.null(vecfile())){
      read_csv(vecfile()) %>% filter(direction=='positive')}
  })
  
- output$vecplot<- renderPlot({
-     ggplot(d(), aes(x=reorder(keywords,similarity),y=similarity)) + 
-     geom_col(fill='skyblue')+
-     labs(x="Keywords",y='Similarity',title=paste0("Top 10 Keywords Related to ", input$choice))+
+ output$vecplot1<- renderPlot({
+     ggplot(pos(), aes(x=reorder(keywords,similarity),y=similarity)) + 
+     geom_col(fill='#00A087B2')+
+     labs(x="Keywords",y='Conditional Probability',title=paste0("Top 10 Keywords Related to Positive"," ",input$choice, " ", "Reviews"))+
      theme(plot.title = element_text(size=22), axis.title=element_text(size=16), 
            axis.text.y=element_text(size=12), 
            axis.text.x = element_text(size=12, angle = 45, hjust=1))
  })
  
+ neg<-reactive({
+   if(!is.null(vecfile())){
+     read_csv(vecfile()) %>% filter(direction=='negative')}
+ })
+ 
+ output$vecplot2<- renderPlot({
+   ggplot(neg(), aes(x=reorder(keywords,similarity),y=similarity)) + 
+     geom_col(fill="#DC0000B2")+
+     labs(x="Keywords",y='Conditional Probability',title=paste0("Top 10 Keywords Related to Negative"," ", input$choice," ", "Reviews"))+
+     theme(plot.title = element_text(size=22), axis.title=element_text(size=16), 
+           axis.text.y=element_text(size=12), 
+           axis.text.x = element_text(size=12, angle = 45, hjust=1))
+ })
  
  
 } # end of server
