@@ -192,4 +192,84 @@ quote_path <- paste0(quote_path,'.csv')
 print(quote_path)
 write.csv(standout_tips, quote_path)
 
+######################################################################################################
+
+#Format n-gram files together to account for shiny publish constraint ----------Reviews
+
+filepath <- "app_data/review-grams/"
+myfiles <- list.files(path = filepath, pattern = "csv", full.names = TRUE)
+
+set_names <- c('Rank', '1-Gram', 'Frequency-1', 'Percent-Total-1','2-Gram', 'Frequency-2', 'Percent-Total-2','3-Gram', 'Frequency-3', 'Percent-Total-3', 'type', 'business_id')
+
+data <- data.frame(matrix(ncol = 12)); colnames(data) <- set_names
+
+for(file in myfiles){
+  temp = str_split(file,"/")[[1]][3]
+  
+  if(str_detect(file,'good')){
+    type="good"
+    temp = str_split(temp,"-good")
+    bus_id = temp[[1]][1]
+    }
+  else {
+    type="bad"
+    temp = str_split(temp,"-bad")
+    bus_id = temp[[1]][1]}
+  
+  new_data <- read_csv(file) %>% 
+    mutate(type=type, business_id = bus_id)
+  colnames(new_data) <- set_names
+  
+  data <- rbind(data,new_data)
+}
+
+
+
+bad_review_grams <- data %>% 
+  filter(type=="bad")
+
+
+good_review_grams <- data %>% 
+  filter(type=="good")
+
+write.csv(bad_review_grams,'app_data/bad_reviews_grams.csv')
+
+write.csv(good_review_grams,'app_data/good_reviews_grams.csv')
+
+
+
+test <- read_csv('app_data/good_reviews_grams.csv')
+
+
+###################################################################################################### ----------Tips
+
+
+#Format n-gram files together to account for shiny publish constraint
+
+filepath <- "app_data/tip-grams/"
+myfiles <- list.files(path = filepath, pattern = "csv", full.names = TRUE)
+
+set_names <- c('Rank', '1-Gram', 'Frequency-1', 'Percent-Total-1','2-Gram', 'Frequency-2', 'Percent-Total-2','3-Gram', 'Frequency-3', 'Percent-Total-3', 'business_id')
+
+data <- data.frame(matrix(ncol = 11)); colnames(data) <- set_names
+
+for(file in myfiles){
+  temp = str_split(myfiles[2],"/")[[1]][3]
+  temp = str_split(temp,"-gram")
+  bus_id = temp[[1]][1]
+  
+  new_data <- read_csv(file) %>% 
+    mutate(business_id = bus_id)
+  colnames(new_data) <- set_names
+  
+  data <- rbind(data,new_data)
+}
+
+
+data
+
+
+write.csv(data,'app_data/tips_grams.csv')
+
+read_csv('app_data/tips_grams.csv')
 
