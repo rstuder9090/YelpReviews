@@ -1,0 +1,21 @@
+,1-Gram,Frequency,Percent Total 1-Grams,2-Gram,Frequency,Percent Total 2-Grams,3-Gram,Frequency,Percent Total 3-Grams
+0,"('open',)",1,0.05,"('open', 'dinner')",1.0,0.05263157894736842,"('open', 'dinner', '510pm')",1.0,0.05555555555555555
+1,"('dinner',)",1,0.05,"('theyre', 'closed')",1.0,0.05263157894736842,"('dinner', '510pm', 'good')",1.0,0.05555555555555555
+2,"('highly',)",1,0.05,"('clean', 'highly')",1.0,0.05263157894736842,"('service', 'clean', 'highly')",1.0,0.05555555555555555
+3,"('clean',)",1,0.05,"('service', 'clean')",1.0,0.05263157894736842,"('friendly', 'service', 'clean')",1.0,0.05555555555555555
+4,"('service',)",1,0.05,"('friendly', 'service')",1.0,0.05263157894736842,"('quick', 'friendly', 'service')",1.0,0.05555555555555555
+5,"('friendly',)",1,0.05,"('quick', 'friendly')",1.0,0.05263157894736842,"('delicious', 'quick', 'friendly')",1.0,0.05555555555555555
+6,"('quick',)",1,0.05,"('delicious', 'quick')",1.0,0.05263157894736842,"('notice', 'delicious', 'quick')",1.0,0.05555555555555555
+7,"('delicious',)",1,0.05,"('notice', 'delicious')",1.0,0.05263157894736842,"('closed', 'notice', 'delicious')",1.0,0.05555555555555555
+8,"('notice',)",1,0.05,"('closed', 'notice')",1.0,0.05263157894736842,"('theyre', 'closed', 'notice')",1.0,0.05555555555555555
+9,"('closed',)",1,0.05,"('stopped', 'theyre')",1.0,0.05263157894736842,"('stopped', 'theyre', 'closed')",1.0,0.05555555555555555
+10,"('theyre',)",1,0.05,"('dinner', '510pm')",1.0,0.05263157894736842,"('tnt', 'stopped', 'theyre')",1.0,0.05555555555555555
+11,"('stopped',)",1,0.05,"('tnt', 'stopped')",1.0,0.05263157894736842,"('love', 'tnt', 'stopped')",1.0,0.05555555555555555
+12,"('tnt',)",1,0.05,"('love', 'tnt')",1.0,0.05263157894736842,"('specialty', 'love', 'tnt')",1.0,0.05555555555555555
+13,"('love',)",1,0.05,"('specialty', 'love')",1.0,0.05263157894736842,"('tempura', 'specialty', 'love')",1.0,0.05555555555555555
+14,"('specialty',)",1,0.05,"('tempura', 'specialty')",1.0,0.05263157894736842,"('shrimp', 'tempura', 'specialty')",1.0,0.05555555555555555
+15,"('tempura',)",1,0.05,"('shrimp', 'tempura')",1.0,0.05263157894736842,"('good', 'shrimp', 'tempura')",1.0,0.05555555555555555
+16,"('shrimp',)",1,0.05,"('good', 'shrimp')",1.0,0.05263157894736842,"('510pm', 'good', 'shrimp')",1.0,0.05555555555555555
+17,"('good',)",1,0.05,"('510pm', 'good')",1.0,0.05263157894736842,"('clean', 'highly', 'recommend')",1.0,0.05555555555555555
+18,"('510pm',)",1,0.05,"('highly', 'recommend')",1.0,0.05263157894736842,,,
+19,"('recommend',)",1,0.05,,,,,,

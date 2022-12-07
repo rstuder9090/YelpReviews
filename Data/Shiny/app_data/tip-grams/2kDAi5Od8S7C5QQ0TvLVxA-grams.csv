@@ -1,0 +1,10 @@
+,1-Gram,Frequency,Percent Total 1-Grams,2-Gram,Frequency,Percent Total 2-Grams,3-Gram,Frequency,Percent Total 3-Grams
+0,"('yum',)",2,0.2,"('yum', 'entrees')",1,0.1111111111111111,"('yum', 'entrees', 'solid')",1.0,0.125
+1,"('entrees',)",1,0.1,"('entrees', 'solid')",1,0.1111111111111111,"('entrees', 'solid', 'yum')",1.0,0.125
+2,"('solid',)",1,0.1,"('solid', 'yum')",1,0.1111111111111111,"('solid', 'yum', 'grab')",1.0,0.125
+3,"('grab',)",1,0.1,"('yum', 'grab')",1,0.1111111111111111,"('yum', 'grab', 'beers')",1.0,0.125
+4,"('beers',)",1,0.1,"('grab', 'beers')",1,0.1111111111111111,"('grab', 'beers', 'total')",1.0,0.125
+5,"('total',)",1,0.1,"('beers', 'total')",1,0.1111111111111111,"('beers', 'total', 'wine')",1.0,0.125
+6,"('wine',)",1,0.1,"('total', 'wine')",1,0.1111111111111111,"('total', 'wine', 'hit')",1.0,0.125
+7,"('hit',)",1,0.1,"('wine', 'hit')",1,0.1111111111111111,"('wine', 'hit', 'eat')",1.0,0.125
+8,"('eat',)",1,0.1,"('hit', 'eat')",1,0.1111111111111111,,,
