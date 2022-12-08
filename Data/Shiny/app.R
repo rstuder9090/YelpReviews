@@ -16,11 +16,11 @@ tip_reviews <- read_csv('LDA/quotes/quote_tips.csv')
 
 ui<- fluidPage(
   useShinydashboard(),
-  titlePanel("Sushi Restaurant "),
+  titlePanel("Sushi Restaurant Yelp Analysis"),
   navbarPage("Navigation",
              tabPanel("Statistics", fluid = TRUE,
                         sidebarPanel(width=3,
-                          titlePanel("Restaurant Stats"),
+                          titlePanel("Restaurant Selection"),
                           selectizeInput("state", "Select State", choices = c(" ", sort(unique(sushi$state))), selected=NULL), 
                           selectizeInput("city", "Select a City", choices = NULL, selected=NULL),
                           selectizeInput("name", "Select a Restaurant", choices = NULL, selected=NULL)),
@@ -36,8 +36,9 @@ ui<- fluidPage(
                       ), #end tab 1
                tabPanel("Topic Playground", fluid=TRUE,
                       sidebarPanel(titlePanel(htmlOutput("name") ),
+                                   br(),
                                    selectInput("data", "Please Select: Yelp Reviews or Yelp Tips", choices = c("Reviews","Tips"), selected = "Reviews"), 
-                                   em(span('Warning: Chosen restaurant must have over 10 good or 10 bad reviews and 20 tips otherwise table will not appear',style = "color:blue"), align="center"),
+                                   em(span('Warning: Chosen restaurant must have over 10 good or 10 bad reviews and 20 tips otherwise table will not appear',style = "color:blue", align="center")),
                                    br(),
                                    h4(strong('Below are quotes from users that most embody the topics of your business:'), align="center"),
                                    br(),
@@ -47,13 +48,13 @@ ui<- fluidPage(
                       mainPanel(conditionalPanel(condition = "input.data == 'Reviews'", 
                                                  verticalLayout(
                                                    h2("Popular Topics from N-grams on Patron Reviews", align="center"),
-                                                   h3(strong("Good Reviews with stars > 3") , align="center"),
+                                                   h3(strong("Good Reviews (Stars > 3)") , align="center"),
                                                    fluidRow(dataTableOutput("good_reviews_table")), 
-                                                   h3("Bad Review with stars < 3", align="center"),
+                                                   h3(strong("Bad Reviews (Stars < 3)", align="center")),
                                                    fluidRow(dataTableOutput("bad_reviews_table")), 
                                                    br(),
                                                    h2("Unique Topics from LDA", align="center"),
-                                                   splitLayout(cellWidths = c("50%", "50%"), h3("Unique Topics in Good Reviews", align="center"), h3("Unique Topics in Bad Reviews", align="center")),
+                                                   splitLayout(cellWidths = c("50%", "50%"), h3(strong("Unique Topics in Good Reviews", align="center")), h3(strong("Unique Topics in Bad Reviews", align="center"))),
                                                    fluidRow(splitLayout(cellWidths = c("50%", "50%"), dataTableOutput("good_review_topics_table"), dataTableOutput("bad_review_topics_table")))
                                                  ) #close vert layout - reviews
                                                  ), #close conditional panel - reviews
@@ -71,13 +72,12 @@ ui<- fluidPage(
              
              tabPanel("Likes & Dislikes", fluid=TRUE,
                       sidebarPanel(
-                        selectInput("choice", "Select what element you'd like to analyze", choices = c("Service","Roll"))
+                        selectInput("choice", "Select what element you'd like to analyze", choices = c("Service","Roll")),
+                        h4("These graphs depict what patrons like or dislike about Sushi Restaurants.
+                           The values are the % chance the word appears next to either 'Roll' or 'Service' in a review.")
                       ),
                       mainPanel(
                         verticalLayout(
-                        h3("These graphs depict what patrons like or dislike about Sushi Restaurants.
-                           The values are the % chance the word appears next to either 'Roll' or 'Service' in a review."),
-                        br(),
                         fluidRow(plotOutput("vecplot1")),
                         fluidRow(plotOutput("vecplot2"))
                         )
@@ -236,8 +236,8 @@ server<- function(input, output, session) {
   
   
   output$name <- renderText({
-    paste0("<font size=4.5 color=\"000000\"><b>","Explore Popular and Unique Topics for ",
-           "<font size=4.5 color=\"#FF0000\"><b>", input$name, " in ", input$city, ", ", input$state, ".") 
+    paste0("<font size=5 color=\"000000\"><b>","Explore Popular and Unique Topics for ",
+           "<font size=5 color=\"#FF0000\"><b>", input$name, " in ", input$city, ", ", input$state, ".") 
     })
   
   
