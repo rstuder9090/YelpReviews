@@ -30,40 +30,43 @@ ui<- fluidPage(
                             fluidRow(valueBoxOutput("starbox"),valueBoxOutput("reviewbox"),valueBoxOutput("sentbox")),
                            h3(htmlOutput("note")),
                           splitLayout(cellWidths = c("50%", "50%"), plotOutput("hist_all"), plotOutput("hist_rest")),
+                          h3("Below is a graph representing the emotions driving reviews at your resturant."),
                           plotOutput("sent_plot")
-                          # more basics about restaurant performance - compared to average sushi?
                           )),
                       ), #end tab 1
                tabPanel("Topic Playground", fluid=TRUE,
                       sidebarPanel(titlePanel(htmlOutput("name") ),
-                                   selectInput("data", "Choose which insights to view", choices = c("Reviews","Tips"), selected = "Reviews"), 
-                                   strong('Below are quotes from users that most embody the topics of your business:'),
+                                   selectInput("data", "Please Select: Yelp Reviews or Yelp Tips", choices = c("Reviews","Tips"), selected = "Reviews"), 
+                                   em(span('Warning: Chosen restaurant must have over 10 good or 10 bad reviews and 20 tips otherwise table will not appear',style = "color:blue"), align="center"),
                                    br(),
-                                   p('Warning: Chosen restaurant must have over 10 good or 10 bad reviews and 20 tips otherwise table will not appear'),
+                                   h4(strong('Below are quotes from users that most embody the topics of your business:'), align="center"),
                                    br(),
                                    htmlOutput("quote_header"),
                                    htmlOutput("review_quotes")
                       ),
                       mainPanel(conditionalPanel(condition = "input.data == 'Reviews'", 
                                                  verticalLayout(
-                                                   strong("Popular Topics from N-grams --- Left: Good Reviews with stars > 3. ------------------ ------------------  Right: Bad Review with stars < 3"),
-                                                   splitLayout(cellWidths = c("50%", "50%"), dataTableOutput("good_reviews_table"), dataTableOutput("bad_reviews_table")), br(),
-                                                   strong("Unique Topics from LDA ---Left: Unique Topics in Good Reviews. ------------------------------------ Right: Unique Topics in Bad Reviews "),
-                                                   splitLayout(cellWidths = c("50%", "50%"), dataTableOutput("good_review_topics_table"), dataTableOutput("bad_review_topics_table"))
+                                                   h2("Popular Topics from N-grams on Patron Reviews", align="center"),
+                                                   h3(strong("Good Reviews with stars > 3") , align="center"),
+                                                   fluidRow(dataTableOutput("good_reviews_table")), 
+                                                   h3("Bad Review with stars < 3", align="center"),
+                                                   fluidRow(dataTableOutput("bad_reviews_table")), 
+                                                   br(),
+                                                   h2("Unique Topics from LDA", align="center"),
+                                                   splitLayout(cellWidths = c("50%", "50%"), h3("Unique Topics in Good Reviews", align="center"), h3("Unique Topics in Bad Reviews", align="center")),
+                                                   fluidRow(splitLayout(cellWidths = c("50%", "50%"), dataTableOutput("good_review_topics_table"), dataTableOutput("bad_review_topics_table")))
                                                  ) #close vert layout - reviews
-                                                 
                                                  ), #close conditional panel - reviews
-          
-                                conditionalPanel(condition = "input.data == 'Tips'", 
-                                verticalLayout(
-                                  strong("Popular Topics from N-grams on Tips Dataset"),
-                                  dataTableOutput("tips_table"), br(),
-                                  strong("Unique Topics from LDA on Tips Dataset"),
-                                  dataTableOutput("tips_topics_table")
-                                ) #close vert layout - tips
-                                
-                      ) #close conditional panel - tips
-                      )#close main panel
+                                conditionalPanel(condition = "input.data == 'Tips'",
+                                                 verticalLayout(
+                                                   h3("Popular Topics from N-grams on Patron Tips", align="center"),
+                                                   dataTableOutput("tips_table"),
+                                                   br(),
+                                                   h3("Unique Topics from LDA on Tips Dataset", align="center"),
+                                                   dataTableOutput("tips_topics_table")
+                                                   ) #close vert layout - tips
+                                                 ) #close conditional panel - tips
+                                )#close main panel
                       ), # end tab 2
              
              tabPanel("Likes & Dislikes", fluid=TRUE,
@@ -72,6 +75,9 @@ ui<- fluidPage(
                       ),
                       mainPanel(
                         verticalLayout(
+                        h3("These graphs depict what patrons like or dislike about Sushi Restaurants.
+                           The values are the % chance the word appears next to either 'Roll' or 'Service' in a review."),
+                        br(),
                         fluidRow(plotOutput("vecplot1")),
                         fluidRow(plotOutput("vecplot2"))
                         )
@@ -89,15 +95,10 @@ ui<- fluidPage(
                            strive for better ratings."),
                         br(),
                         em("For error reporting or questions please contact rlstuder@wisc.edu")
-                      )
-               
-             ) # end tab 4
-             )) # end UI
+                      )))) # end UI
 
 
 condition <- function(x){ x == " " | x == ""}  #Define condition expression to fix bugs regarding input$name == null
-
-
 
 
 server<- function(input, output, session) {
@@ -110,13 +111,11 @@ server<- function(input, output, session) {
     updateSelectizeInput(session, "name", "Select a Restaurant", server = TRUE, choices = c(" ",sort(unique(sushi$name[which( sushi$state == input$state & sushi$city == input$city)]))))
   }, priority = 2)
   
-  
   business<- reactive({
     if(!is.null(input$name)){
       sushi$business_id[which(sushi$name == input$name & sushi$city == input$city)]
     }
   })
-  
   
   stars <- reactive({
     if(!is.null(input$name)){
@@ -213,8 +212,9 @@ server<- function(input, output, session) {
        main = "Emotions in Reviews", xlab="Percentage") 
    }
  }) 
-   ##############End stats page logic
-  #helper functions for LDA discriminative  topics
+ 
+##############End stats page logic
+# helper functions for LDA discriminative  topics
   kl_div <- function(p1, p2) {
     p1 * log(p1 / p2) + (p2 - p2)
   }
@@ -236,8 +236,8 @@ server<- function(input, output, session) {
   
   
   output$name <- renderText({
-    aa <- paste0("Explore Popular and Unique Topics for ","<font color=\"#FF0000\"><b>", input$name, " in ", input$city, ", ", input$state, ".") 
-    paste0(aa,"<font color=\"000000\"><b>","<br> Please Select: Yelp Reviews  or Yelp Tips.")
+    paste0("<font size=4.5 color=\"000000\"><b>","Explore Popular and Unique Topics for ",
+           "<font size=4.5 color=\"#FF0000\"><b>", input$name, " in ", input$city, ", ", input$state, ".") 
     })
   
   
@@ -280,23 +280,25 @@ output$good_review_topics_table <- renderDataTable({
   id <- business_ID()
   prepath <- 'LDA/review-LDA/'
   path <- paste0(prepath,id,"good-.rda")
-  loaded_good <- load(path)
-  
-  discriminative_terms <- topics %>%
-    group_by(term) %>%
-    mutate(D = discrepancy(beta)) %>%
-    ungroup() %>%
-    slice_max(D, n = 25) %>%
-    mutate(term = fct_reorder(term, -D))
-  
-  
-  discriminative_terms <- discriminative_terms %>%
-    select(-D) %>%
-    pivot_wider(names_from = "topic", values_from = "beta") 
-  
-  discriminative_terms %>% 
-    mutate(rank = 1:nrow(discriminative_terms)) %>% 
-    select(term,rank)
+  if(file.exists(path)==TRUE){
+    loaded_good <- load(path)
+    
+    discriminative_terms <- topics %>%
+      group_by(term) %>%
+      mutate(D = discrepancy(beta)) %>%
+      ungroup() %>%
+      slice_max(D, n = 25) %>%
+      mutate(term = fct_reorder(term, -D))
+    
+    
+    discriminative_terms <- discriminative_terms %>%
+      select(-D) %>%
+      pivot_wider(names_from = "topic", values_from = "beta") 
+    
+    discriminative_terms %>% 
+      mutate(rank = 1:nrow(discriminative_terms)) %>% 
+      select(term,rank)
+  }
   
 })
 
@@ -305,6 +307,7 @@ output$bad_review_topics_table <- renderDataTable({
   id <- business_ID()
   prepath <- 'LDA/review-LDA/'
   path <- paste0(prepath,id,"bad-.rda")
+  if(file.exists(path)==TRUE){
   loaded_good <- load(path)
   
   discriminative_terms <- topics %>%
@@ -322,6 +325,7 @@ output$bad_review_topics_table <- renderDataTable({
   discriminative_terms %>% 
     mutate(rank = 1:nrow(discriminative_terms)) %>% 
     select(term,rank)
+  }
 })  
 
 #Tips LDA 
@@ -329,6 +333,7 @@ output$tips_topics_table <- renderDataTable({
   id <- business_ID()
   prepath <- 'LDA/tips-LDA/'
   path <- paste0(prepath,id,".rda")
+  if(file.exists(path)==TRUE){
   loaded_good <- load(path)
   
   discriminative_terms <- topics %>%
@@ -346,6 +351,7 @@ output$tips_topics_table <- renderDataTable({
   discriminative_terms %>% 
     mutate(rank = 1:nrow(discriminative_terms)) %>% 
     select(term,rank)
+  }
 })  
 
 
@@ -378,7 +384,6 @@ output$review_quotes <- renderText({
   }
 quotes
 })
-
 
 ##############End topics page logic
  vecfile<- reactive({
