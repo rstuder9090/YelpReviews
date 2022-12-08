@@ -1,9 +1,7 @@
-
 library(tidyverse)
 
-
 sushi_df<- read_csv("sushi.csv")
-sushi<- sushi_df %>% select(1:10)
+sushi<- sushi_df %>% filter(is_open==1) %>%select(1:10)
 
 sushi$city[which(sushi$city == "Tuscon" & sushi$state == "AZ" )] <- "Tucson"
 sushi$city[which(sushi$city == "Clearwater Beach" & sushi$state == "FL" )] <- "Clearwater"
@@ -22,12 +20,29 @@ sushi$city[which(sushi$city == "MEDIA" & sushi$state == "PA" )] <- "Media"
 sushi$city[which(sushi$city == "Warrington Township" & sushi$state == "PA" )] <- "Warrington"
 sushi$city[which((sushi$city == "Mt Juliet Louis" | sushi$city == "Mt. Juliet")& sushi$state=="TN" )] <- "Mount Juliet"
 
+#### Duplicate Restaurants
+sushi$name[which(sushi$business_id== "Q-IvBYRM1wSGL6wY-l5zEw")]<- "IOU Sushi -Findley Ave"
+sushi$name[which(sushi$business_id== "9d0gEJEMVjy8UVlDg-yylw")]<-"Superb Sushi -8th St"
+sushi$name[which(sushi$business_id== "NvmCO5xNbN41IRN5mxXUEg")]<-"Willowcreek Grill & Raw Sushi -Vista Ave"
+sushi$name[which(sushi$business_id== "JH4S0Cvw25hFHf7m6UBmSw")]<- "iSushi Cafe"
+sushi$name[which(sushi$business_id== "RmcZOeOJ8QyfRFGjiPrnkg")]<- "Naked Tchopstix on College Ave"
+sushi$name[which(sushi$business_id== "ppqy2ZngsnYbp9e3qXGz-w")]<- "Sushi Club on 10th St"
+sushi$name[which(sushi$business_id== "dhhq9NKmFAk7BxR6nuTfvQ")]<- "Sushi On the Rocks -Meridian St"
+sushi$name[which(sushi$business_id== "6ZSLVI8PDkczCp9qrYj_tQ")]<- "Watami Sushi All You Can Eat -Pendleton Pike"
+sushi$name[which(sushi$business_id== "kDmeq29jdwm-XatR2tCCYQ")]<-"Kanno California Sushi Bar -20th St"
+sushi$name[which(sushi$business_id== "4JsMdrc-zs_3ZhTipMmUqw")]<-"Izakaya Little Tokyo Restaurant"
+sushi$name[which(sushi$business_id== "JXucCTkmYXql9C8HGPbG4Q")]<-"Koi Sushi & Thai - Main St"
+sushi$name[which(sushi$business_id== "qTicP3qlsW6zqLV7P1Uz_g")]<-"The Eastern Peak - Thompson Lane"
+sushi$name[which(sushi$business_id==  "qQndnEgepogvQdFxeOUyvg")]<-"KELP Sushi Joint -Waters Ave"
+sushi$name[which(sushi$business_id==  "eYNcVdV5bqqg-q23_FU0Vw")]<- "Pokeworks -Fowler Ave"
+sushi$name[which(sushi$business_id==  "LmZWlvPJBwj5WG2KHV-v1Q")]<-"Sushi Garden -Broadway Bvld"
+sushi$name[which(sushi$business_id==  "lhsQkb5nhf-Kd5OvgB9MNg")]<-"Sachiko Sushi -Valencia Rd"
 
-
-compact <- sushi %>% 
+compact <- sushi %>% filter(!business_id %in% c("-gZPRSuaHJG7PYHAGFmqdQ","yUpc_zF_lw_Fqi0gDTFwjQ", "LqpoPXU-4QijJJKmJCPhNw", "5jXiZ23pb-xf457uNM2yZg", 
+                                                "K0mA7srJ-1aFZhSUzMWM_g", "pWpi_cCH8IxwWy7pRmtq2w", "e-4XTNeu31kowN1HRbJ_Gw", "ld1b8y_PHH6Mn_e7T0u04g")) %>%
   select(-c(6:8))
 
-write.csv(compact, 'app_data/app_business_data.csv')
+write.csv(compact, 'Shiny/app_business_data.csv')
 
 
 ################################################################################################################
@@ -40,11 +55,10 @@ reviews$stars <- as.integer(reviews$stars)
 stars_all_reviews <- reviews %>% 
   select(business_id, stars)
  
-write.csv(stars_all_reviews, 'app_data/stars_all_reviews.csv')
+write.csv(stars_all_reviews, 'Shiny/stars_all_reviews.csv')
 
 
 ################################################################################################################
-
 
 #Put LDA findings altogether in an organized format: create individual analysis for each business then save results into file system.
 #Reviews first
@@ -57,7 +71,6 @@ reviews <- read_csv("sushi_reviews.csv"); colnames(reviews)[1] <- "index"
 tips <- read_csv("sushi_tips.csv"); colnames(tips)[1] <- "index"
 
 business <- read_csv("sushi.csv")
-
 
 
 extra_stop_words <- c('sushi', 'food', 'rolls', 'place', 'just', 'one')  #from n-gram analysis
@@ -124,10 +137,10 @@ for(i in business$business_id){
 }#closes business_id loop
 
 
-quote_path <- paste0('app_data/quotes/','quote_reviews')
-quote_path <- paste0(quote_path,'.csv')
-print(quote_path)
-write.csv(standout_reviews, quote_path)
+# quote_path <- paste0('app_data/quotes/','quote_reviews')
+# quote_path <- paste0(quote_path,'.csv')
+# print(quote_path)
+# write.csv(standout_reviews, quote_path)
 
 
 #Same structure applied to tips data 
@@ -187,10 +200,10 @@ for(i in business$business_id){
 }#closes business_id loop
 
 
-quote_path <- paste0('app_data/quotes/','quote_tips')
-quote_path <- paste0(quote_path,'.csv')
-print(quote_path)
-write.csv(standout_tips, quote_path)
+# quote_path <- paste0('app_data/quotes/','quote_tips')
+# quote_path <- paste0(quote_path,'.csv')
+# print(quote_path)
+# write.csv(standout_tips, quote_path)
 
 ######################################################################################################
 
@@ -253,16 +266,9 @@ for(i in 1:nrow(tester)){
 }
 
 
+write.csv(bad_review_grams,'Shiny/bad_reviews_grams.csv')
 
-
-
-write.csv(bad_review_grams,'app_data/bad_reviews_grams.csv')
-
-write.csv(good_review_grams,'app_data/good_reviews_grams.csv')
-
-
-
-test <- read_csv('app_data/good_reviews_grams.csv')
+write.csv(good_review_grams,'Shiny/good_reviews_grams.csv')
 
 
 ###################################################################################################### ----------Tips
@@ -313,9 +319,4 @@ tester$Rank[2]
 
 tail(tester)
 
-write.csv(tester,'tips_grams.csv')
-
-read_csv('tips_grams.csv')
-
-
-
+write.csv(tester,'Shiny/tips_grams.csv')
