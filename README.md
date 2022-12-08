@@ -26,11 +26,11 @@ Contains any R code for cleaning, analysis, visualization, or Shiny App creation
 ## Data Folder
 Contains any clean or raw data
 - [Shiny](Data/Shiny/) folder for all files and scripts utilized in Shiny app production
+- [all_grams_all_reviews.csv](Data/all_grams_all_reviews.csv) all N-grams together
 - [sushi.csv](Data/sushi.csv) cleaned business dataset
 - [sushi_tips.csv](Data/sushi_tips.csv) cleaned tips dataset
 - 10 [sushi_review](Data/sushi_review-1.csv) cleaned reviews dataset - split in 10 files
 - 5 [Star-grams.csv](Data/1-Star-grams.csv) 5 star level split grams
-- [all_grams_all_reviews.csv](Data/all_grams_all_reviews.csv) all N-grams together
 
 
 ## Images Folder
@@ -39,5 +39,5 @@ Contains all important images relative to analysis or EDA.
 
 ## How to use Code
 Retrieve the business, reviews, and tips JSON files from Yelp.\
-Download all files in Code folder into directory of choice. \
+Download all files in Code & Data folders into directory of choice. \
 Set working directory to respective directory.
