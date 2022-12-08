@@ -7,7 +7,7 @@ Parsing through Yelp Review data to help businesses find information on themselv
 
 Created with R 4.1.1
 
-[Shiny App link](https://rstuder9090.shinyapps.io/Yelp_Shiny/)
+[Shiny App link](https://rstuder9090.shinyapps.io/ShinyYelp/)
 
 ## Code Folder
 Contains any R code for cleaning, analysis, visualization, or Shiny App creation.
