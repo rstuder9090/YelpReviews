@@ -8,14 +8,14 @@ library(syuzhet)
 
 reviewall=data.frame()
 for (i in 1:10){
-  filename=paste0('./Data/sushi_review-',i,'.csv')
+  filename=paste0('sushi_review-',i,'.csv')
   reviewi=read.csv(filename)
   #   filter(business_id=='vC2qm1y3Au5czBtbhc-DNw')
   reviewall=rbind(reviewall,reviewi)
 }
 sw=c(stop_words$word,"sushi",'dont','im','restaurant','dish','dishes','dinner','roles')
-sw[167]=NA
-sw[865]=NA
+# sw[167]=NA
+# sw[865]=NA
 # senti_res=data.frame()
 for (business in unique(reviewall$business_id)[1:2]){
   # bad_review=reviewall %>% filter(stars<3 & business_id==business_id)
@@ -48,15 +48,20 @@ nn_bad=predict(model_bad,'get',type="nearest",top_n=7)
 # review=reviewall %>% filter(business_id=='vC2qm1y3Au5czBtbhc-DNw' )
 # text <- iconv(review$V10)
 
-s <- read.csv('Data/sentiment/vC2qm1y3Au5czBtbhc-DNw.csv')
-barplot(
-      sort(colSums(prop.table(s[, 1:8]))),
-      horiz = TRUE,
-      col='skyblue',
-      cex.names = 0.7,
-      las = 1,
-      main = "Emotions in Reviews", xlab="Percentage"
+#s <- read.csv('Data/sentiment/vC2qm1y3Au5czBtbhc-DNw.csv')
+text <- iconv(reviewall$V10)
+#s <- get_nrc_sentiment(text)
+pl=function(i){
+  si=read.csv(paste0('Data/sentiment/',file_list[i]))
+  barplot(
+    sort(colSums(prop.table(si[, 1:8]))),
+    horiz = TRUE,
+    col='skyblue',
+    cex.names = 0.7,
+    las = 1,
+    main = "Emotions in Reviews", xlab="Percentage"
   )
+}
 # bing_vector <- get_sentiment(text, method="bing")
 # senti_score=mean(bing_vector)
   
@@ -65,11 +70,15 @@ barplot(
 # a=wordvec('vC2qm1y3Au5czBtbhc-DNw',c('roll'))
 
 s <- read.csv('.//Data//word2vec_roll.csv')
-barplot(
-  sort(colSums(prop.table(s[, 1:8]))),
-  horiz = TRUE,
-  col='skyblue',
-  cex.names = 0.7,
-  las = 1,
-  main = "Emotions in Reviews", xlab="Percentage"
-)
+s %>% filter(direction=='positive') %>% 
+  ggplot() + 
+  geom_col(aes(x=reorder(keywords,similarity),y=similarity),fill='skyblue')+
+  labs(x="Keywords",y='Similarity',
+       title="Top 10 Keywords Related to the Target Word")
+
+file_list=list.files(path='Data/sentiment')
+s=data.frame()
+for (i in file_list){
+  si=read.csv(paste0('Data/sentiment/',i))
+  s=rbind(s,si)
+}
